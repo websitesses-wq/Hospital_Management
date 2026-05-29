@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{ doctor.name }} — Profile — Cityline General Hospital{% endblock %}
+
+{% block content %}
+<a href="javascript:history.back()" style="display: inline-block; margin-bottom: 20px; color: var(--brand-color); text-decoration: none; font-size: 0.9rem;">
+    &larr; Go Back
+</a>
+
+<div class="doctor-detail-container">
+    <!-- Doctor Profile Information -->
+    <div class="detail-profile">
+        <h2 class="detail-name">{{ doctor.name }}</h2>
+        <div class="detail-spec" style="color: var(--brand-color);">{{ doctor.specialization_name }}</div>
+        <div class="detail-qual">{{ doctor.qualification }}</div>
+        
+        <div style="margin-bottom: 30px;">
+            <span class="status-badge {% if doctor.is_available == 1 or doctor.is_available == True %}available{% else %}unavailable{% endif %}">
+                {% if doctor.is_available == 1 or doctor.is_available == True %}
+                    Currently Available
+                {% else %}
+                    Currently Not Available
+                {% endif %}
+            </span>
+        </div>
+        
+        <div class="contact-info">
+            <div class="contact-row">
+                <div class="contact-label">Phone:</div>
+                <div class="contact-value">{{ doctor.phone }}</div>
+            </div>
+            <div class="contact-row">
+                <div class="contact-label">Email:</div>
+                <div class="contact-value"><a href="mailto:{{ doctor.email }}" style="color: var(--brand-color); text-decoration: none;">{{ doctor.email }}</a></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Weekly Schedule -->
+    <div class="schedule-card">
+        <h3 class="schedule-title">Consultation Hours</h3>
+        {% if doctor.schedules %}
+            <table class="schedule-table">
+                <tbody>
+                    {% for sch in doctor.schedules %}
+                        <tr>
+                            <td class="schedule-day">{{ sch.day_of_week }}</td>
+                            <td class="schedule-time">{{ sch.start_time[:5] }} - {{ sch.end_time[:5] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: var(--text-muted); font-size: 0.9rem;">No consultation hours scheduled for this doctor.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

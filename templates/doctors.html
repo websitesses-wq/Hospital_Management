@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Our Doctors — Cityline General Hospital{% endblock %}
+
+{% block content %}
+<h2 class="section-title">Our Medical Specialists</h2>
+
+<form id="filterForm" method="GET" action="{{ url_for('doctors_list') }}" class="filter-container">
+    <label for="specialization" class="filter-label">Filter by Specialization:</label>
+    <select id="specialization" name="specialization" class="filter-select" onchange="this.form.submit()">
+        <option value="">All Specializations</option>
+        {% for spec in specializations %}
+            <option value="{{ spec.id }}" {% if selected_spec_id == spec.id %}selected{% endif %}>{{ spec.name }}</option>
+        {% endfor %}
+    </select>
+</form>
+
+{% if doctors %}
+    <div class="results-grid">
+        {% for doc in doctors %}
+            <a href="{{ url_for('doctor_detail', doctor_id=doc.id) }}" class="doctor-card">
+                <div class="doctor-card-info">
+                    <h3>{{ doc.name }}</h3>
+                    <div class="doctor-spec">{{ doc.specialization_name }}</div>
+                    <div class="doctor-qual">{{ doc.qualification }}</div>
+                </div>
+                <div>
+                    {% if doc.is_available == 1 or doc.is_available == True %}
+                        <span class="status-badge available">Available</span>
+                    {% else %}
+                        <span class="status-badge unavailable">Not Available</span>
+                    {% endif %}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="no-results">
+        No doctors found for the selected specialization.
+    </div>
+{% endif %}
+
+{% endblock %}

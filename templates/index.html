@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Home — Cityline General Hospital{% endblock %}
+
+{% block content %}
+<div class="intro-container">
+    <h1>Cityline General Hospital</h1>
+    <p class="tagline">Your health, our priority.</p>
+    
+    <p class="intro-desc">
+        Providing compassionate, patient-centered clinical care since 1978. Our medical specialists are dedicated to your well-being. Search by symptom or doctor name below to view relevant practitioners and check their real-time availability.
+    </p>
+    
+    <form action="{{ url_for('search') }}" method="GET" class="search-form">
+        <input 
+            type="text" 
+            name="q" 
+            placeholder="Search by symptom, condition, or doctor name..." 
+            class="search-input"
+            required
+            autocomplete="off"
+        >
+        <button type="submit" class="btn-primary">Search</button>
+    </form>
+</div>
+{% endblock %}

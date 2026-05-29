@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results — Cityline General Hospital{% endblock %}
+
+{% block content %}
+<div class="search-header-container">
+    <h2 class="section-title">Search Doctors</h2>
+    
+    <form action="{{ url_for('search') }}" method="GET" class="search-form">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search by symptom, condition, or doctor name..." class="search-input" required autocomplete="off" title="SQL Query Executed:&#10;MySQL&#10;{{ sql_query|e }}" data-sql="SQL Query Executed:&#10;MySQL&#10;{{ sql_query|e }}">
+        <button type="submit" class="btn-primary">Search</button>
+    </form>
+    
+    {% if corrected_term %}
+    <div class="correction-note">
+        Showing results for <strong>"{{ corrected_term }}"</strong> (spelling corrected from "<em>{{ query }}</em>").
+    </div>
+    {% else %}
+    <p style="margin-bottom: 20px; font-size: 0.95rem; color: var(--text-muted);">
+        Search results for: "<strong>{{ query }}</strong>"
+    </p>
+    {% endif %}
+</div>
+
+{% if doctors %}
+    <div class="results-grid">
+        {% for doc in doctors %}
+            <a href="{{ url_for('doctor_detail', doctor_id=doc.id) }}" class="doctor-card">
+                <div class="doctor-card-info">
+                    <h3>{{ doc.name }}</h3>
+                    <div class="doctor-spec">{{ doc.specialization_name }}</div>
+                    <div class="doctor-qual">{{ doc.qualification }}</div>
+                </div>
+                <div>
+                    {% if doc.is_available == 1 or doc.is_available == True %}
+                        <span class="status-badge available">Available</span>
+                    {% else %}
+                        <span class="status-badge unavailable">Not Available</span>
+                    {% endif %}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="no-results">
+        No doctors found matching "{{ query }}". Try searching for common symptoms (like <em>fever</em>, <em>chest pain</em>, <em>rash</em>) or name (like <em>Patel</em>).
+    </div>
+{% endif %}
+{% endblock %}
