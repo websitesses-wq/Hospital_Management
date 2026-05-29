@@ -113,6 +113,6 @@ def doctor_detail(doctor_id):
 
 if __name__ == '__main__':
     # Try running on port 3000 as configured in .env
-    port = int(os.getenv("PORT", 8080))
+    port = int(os.getenv("PORT", 3306))
     print(f"[*] Starting Hospital Management System on http://localhost:{port}")
     app.run(host="0.0.0.0", port=port, debug=True)
